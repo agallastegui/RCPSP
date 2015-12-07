@@ -72,5 +72,20 @@ void TimeSolver::initModel(){
 		}
 	}
 
+	//Contrainte3
+	for(IloInt t=1; t<T; t++){
+		for(IloInt k=1; k<nb_ressources; k++){
+			IloEXpr Ctr3i(*this->environment);
+			for(IloInt i=0; i<nb_jobs; i++){
+				IloExpr Ctr3t(*this->environment);
+				for(IloInt r=t-this->problem->jobDuration(i)+1;r<t; r++){
+					Ctr3t += y[i][r];
+				}
+				Ctr3i += this->problem->consoRessources(i,k) * Ctr3t;
+			}
+			Ctr3i<=this->problem->capacity(k);
+		}
+	}
+
 
 
